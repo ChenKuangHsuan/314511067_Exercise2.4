@@ -115,8 +115,28 @@ def generate_real_samples_with_labels_Rayleigh(h_dataset, number=100):
     """
     # np.random.choice select 'number' samples from h_dataset
     # TO DO: realize the function
-    return received_data, conditioning
 
+    # 1. Select random channel coefficients from `h_dataset`.
+    h_complex = np.random.choice(h_dataset, number)
+    h_real = np.real(h_complex)
+    h_imag = np.imag(h_complex)
+    
+    # 2. Generate random QAM symbols (QPSK, 16QAM, etc.).
+    symbols = np.random.choice(len(mean_set_QAM), number)    
+    
+    # 3. Create the received signal (y = hx + n).
+    data = mean_set_QAM[symbols]
+    received_data = h_complex * data
+    received_data = np.hstack((np.real(received_data).reshape(len(received_data), 1),
+                               np.imag(received_data).reshape(len(received_data), 1)))
+    noise = np.random.multivariate_normal([0, 0], [[0.01, 0], [0, 0.01]], number).astype(np.float32)
+    received_data += noise
+
+    # 4. Construct the conditioning vector.
+    conditioning = np.hstack((np.real(data).reshape(len(data), 1), np.imag(data).reshape(len(data), 1),
+                              h_real.reshape(len(data), 1), h_imag.reshape(len(data), 1))) / 3
+
+    return received_data, conditioning
 
 # ────────────────────────  Main Execution  ────────────────────────────────── #
 """ ==== Here is the main function ==== """
