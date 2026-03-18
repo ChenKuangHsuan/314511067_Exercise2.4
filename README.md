@@ -1,4 +1,5 @@
-# 314511067 Exercise 2.4: 基於 GAN 的 MIMO 通道建模與生成
+# 314511067 Exercise 2.4
+# 基於 GAN 的 MIMO 通道建模與生成
 
 本練習展示如何利用 **QuaDRiGa (QUAsi Deterministic RadIo channel GeneraTor)** 產生真實的無線通道數據，並進一步使用 **Conditional GAN (CGAN)** 框架來學習並模擬這些通道的物理特性。
 
